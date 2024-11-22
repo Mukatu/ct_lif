@@ -12,19 +12,19 @@ const galleryTiles = ref([
     id: 1,
     title: 'Team Building 2024',
     description: 'Découvrez nos moments forts',
-    image: 'https://picsum.photos/400/300'
+    image: '/images/PENSEE DE LA SEMAINE.png'
   },
   {
     id: 2,
     title: 'Séminaire RH',
     description: 'Formation continue',
-    image: 'https://picsum.photos/400/301'
+    image: '/images/PENSEE DE LA SEMAINE.png'
   },
   {
     id: 3,
     title: 'Fête de fin d\'année',
     description: 'Célébration annuelle',
-    image: 'https://picsum.photos/400/302'
+    image: '/images/PENSEE DE LA SEMAINE.png'
   }
 ])
 

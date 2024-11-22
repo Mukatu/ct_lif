@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../../stores/auth'
 import VideoModal from '../VideoModal.vue'
+import ModerationSidebar from '../moderation/ModerationSidebar.vue'
 
 const router = useRouter()
-const showModal = ref(false)
-const selectedVideo = ref(null)
+const authStore = useAuthStore()
 
+const isInternalComm = computed(() => authStore.user?.role === 'internal_comm')
+const isEmployee = computed(() => authStore.user?.role === 'employee')
+
+// Formations pour les employés
 const trainings = ref([
   {
     id: 1,
@@ -26,35 +31,32 @@ const trainings = ref([
   },
   {
     id: 3,
-    title: 'Leadership et management d\'équipe',
-    duration: '30 min',
-    level: 'Avancé',
-    url: 'https://example.com/video3',
-    thumbnail: 'https://picsum.photos/70/40'
-  },
-  {
-    id: 4,
     title: 'Communication efficace',
     duration: '25 min',
     level: 'Intermédiaire',
-    url: 'https://example.com/video4',
+    url: 'https://example.com/video3',
     thumbnail: 'https://picsum.photos/70/40'
   }
 ])
+
+const showModal = ref(false)
+const selectedVideo = ref(null)
 
 const openVideo = (training) => {
   selectedVideo.value = training
   showModal.value = true
 }
 
-const goToTrainings = () => {
-  router.push('/trainings')
+const closeVideo = () => {
+  showModal.value = false
+  selectedVideo.value = null
 }
 </script>
 
 <template>
-  <div class="bg-white rounded-lg shadow p-4">
-    <h2 class="text-base font-semibold text-gray-900 mb-4">Formations disponibles</h2>
+  <!-- Sidebar pour les employés -->
+  <div v-if="isEmployee" class="bg-white rounded-lg shadow p-4">
+    <h2 class="text-base font-semibold text-gray-900 mb-4">Formations recommandées</h2>
     <div class="space-y-3">
       <button 
         v-for="training in trainings" 
@@ -79,19 +81,14 @@ const goToTrainings = () => {
         </div>
       </button>
     </div>
-    <div class="mt-4 text-center">
-      <button 
-        @click="goToTrainings"
-        class="text-[#F2682C] hover:text-[#e55a20] font-medium text-sm"
-      >
-        Voir toutes les formations
-      </button>
-    </div>
+
+    <VideoModal
+      v-if="showModal"
+      :video="selectedVideo"
+      @close="closeVideo"
+    />
   </div>
 
-  <VideoModal
-    v-if="showModal"
-    :video="selectedVideo"
-    @close="showModal = false"
-  />
+  <!-- Sidebar pour les modérateurs -->
+  <ModerationSidebar v-if="isInternalComm" />
 </template>

@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { leaveService } from '../services/api'
+import { useNotification } from '../composables/useNotification'
 
+const notification = useNotification()
+
+const loading = ref(false)
 const leaveRequest = ref({
   startDate: '',
   endDate: '',
@@ -10,10 +15,25 @@ const leaveRequest = ref({
 
 const submitLeaveRequest = async () => {
   try {
-    // TODO: Implement API call to submit leave request
-    console.log('Leave request submitted:', leaveRequest.value)
+    loading.value = true
+    await leaveService.create(leaveRequest.value)
+    notification.show({
+      type: 'success',
+      message: 'Demande de congé soumise avec succès'
+    })
+    leaveRequest.value = {
+      startDate: '',
+      endDate: '',
+      type: 'paid',
+      reason: ''
+    }
   } catch (error) {
-    console.error('Error submitting leave request:', error)
+    notification.show({
+      type: 'error',
+      message: 'Erreur lors de la soumission de la demande'
+    })
+  } finally {
+    loading.value = false
   }
 }
 </script>
@@ -31,7 +51,7 @@ const submitLeaveRequest = async () => {
               v-model="leaveRequest.startDate"
               type="date"
               required
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#F2682C] focus:ring-[#F2682C]"
             />
           </div>
           
@@ -41,7 +61,7 @@ const submitLeaveRequest = async () => {
               v-model="leaveRequest.endDate"
               type="date"
               required
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#F2682C] focus:ring-[#F2682C]"
             />
           </div>
         </div>
@@ -50,7 +70,7 @@ const submitLeaveRequest = async () => {
           <label class="block text-sm font-medium text-gray-700">Type de congé</label>
           <select
             v-model="leaveRequest.type"
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#F2682C] focus:ring-[#F2682C]"
           >
             <option value="paid">Congé payé</option>
             <option value="unpaid">Congé sans solde</option>
@@ -64,7 +84,8 @@ const submitLeaveRequest = async () => {
           <textarea
             v-model="leaveRequest.reason"
             rows="4"
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            required
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#F2682C] focus:ring-[#F2682C]"
             placeholder="Décrivez brièvement la raison de votre demande"
           ></textarea>
         </div>
@@ -72,9 +93,10 @@ const submitLeaveRequest = async () => {
         <div class="flex justify-end">
           <button
             type="submit"
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            class="px-4 py-2 bg-[#F2682C] text-white rounded-lg hover:bg-[#e55a20] disabled:opacity-50"
+            :disabled="loading"
           >
-            Soumettre la demande
+            {{ loading ? 'Envoi en cours...' : 'Soumettre la demande' }}
           </button>
         </div>
       </form>

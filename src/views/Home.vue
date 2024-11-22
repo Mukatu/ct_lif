@@ -24,11 +24,11 @@ const handleLogin = () => {
       <!-- Promotion Box -->
       <div class="relative">
         <img 
-          src="https://picsum.photos/600/300" 
+          src='/images/ctimg3.png'
           alt="Rentrée numérique" 
-          class="w-[600px] h-[300px] rounded-lg shadow-lg"
+          class="w-[500px] h-[300px] "
         />
-        <div class="absolute top-6 left-6">
+        <!-- <div class="absolute top-6 left-6">
           <div class="bg-white text-blue-500 px-6 py-2 rounded-full font-bold text-lg">
             C'est la Rentrée NUMERIQUE !
           </div>
@@ -37,7 +37,7 @@ const handleLogin = () => {
           <div class="bg-blue-600 text-white px-6 py-2 rounded-lg text-lg font-medium">
             BOX INTERNET GRATUITE !
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -46,18 +46,18 @@ const handleLogin = () => {
       <!-- Speed Logo -->
       <div>
         <img 
-          src="https://picsum.photos/240/48" 
+          src="/images/logo ct_small.jpeg"
           alt="Speed Logo" 
-          class="w-[240px] h-[48px]"
+          class="w-[80px] h-[48px]"
         />
       </div>
 
       <!-- Family Image and Login Button -->
       <div class="flex flex-col items-center space-y-8">
         <img 
-          src="https://picsum.photos/600/300" 
+          src="/images/ctimg4.jpg"
           alt="Famille heureuse" 
-          class="w-[600px] h-[300px] rounded-lg shadow-lg"
+          class="w-[4S0px] h-[400px]"
         />
         <button
           @click="handleLogin"

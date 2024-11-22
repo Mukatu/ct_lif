@@ -3,15 +3,15 @@ import { useAuthStore } from '../stores/auth'
 import Home from '../views/Home.vue'
 import Login from '../views/auth/Login.vue'
 import Feed from '../views/Feed.vue'
+import Gallery from '../views/Gallery.vue'
+import Profile from '../views/Profile.vue'
 import HRDashboard from '../views/hr/Dashboard.vue'
 import LeaveManagement from '../views/hr/LeaveManagement.vue'
 import DocumentManagement from '../views/hr/DocumentManagement.vue'
 import TrainingManagement from '../views/hr/TrainingManagement.vue'
 import EmployeeManagement from '../views/hr/EmployeeManagement.vue'
 import PerformanceManagement from '../views/hr/PerformanceManagement.vue'
-import Gallery from '../views/Gallery.vue'
 import Documentation from '../views/Documentation.vue'
-import Trainings from '../views/Trainings.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -33,14 +33,31 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/gallery',
+      name: 'gallery',
+      component: Gallery,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/documentation',
+      name: 'documentation',
+      component: Documentation,
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/hr',
-      component: HRDashboard,
       meta: { requiresAuth: true, requiresHR: true },
       children: [
         {
           path: '',
           name: 'hr-dashboard',
-          component: LeaveManagement
+          component: HRDashboard
         },
         {
           path: 'leaves',
@@ -68,24 +85,6 @@ const router = createRouter({
           component: PerformanceManagement
         }
       ]
-    },
-    {
-      path: '/gallery',
-      name: 'gallery',
-      component: Gallery,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/documentation',
-      name: 'documentation',
-      component: Documentation,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/trainings',
-      name: 'trainings',
-      component: Trainings,
-      meta: { requiresAuth: true }
     }
   ]
 })
@@ -95,7 +94,7 @@ router.beforeEach((to, from, next) => {
   
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next('/login')
-  } else if (to.meta.requiresHR && !authStore.user?.role === 'hr') {
+  } else if (to.meta.requiresHR && authStore.user?.role !== 'hr') {
     next('/feed')
   } else {
     next()

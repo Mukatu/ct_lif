@@ -28,14 +28,19 @@ const galleryTiles = ref([
   }
 ])
 
-const navigateToGallery = () => {
-  router.push('/gallery')
+const navigateToGallery = (postId: number) => {
+  router.push({
+    path: '/gallery',
+    query: { postId: postId.toString() }
+  })
 }
 </script>
 
 <template>
   <div class="min-h-[calc(100vh-64px)] bg-gray-50">
     <div class="container mx-auto py-6">
+      <h1 class="text-2xl font-bold text-gray-900 mb-6 px-4">Actualités</h1>
+      
       <div class="grid grid-cols-24 gap-4 h-[calc(100vh-96px)]">
         <!-- Left Menu -->
         <div class="col-span-5 sticky top-24">
@@ -49,7 +54,7 @@ const navigateToGallery = () => {
             <div
               v-for="tile in galleryTiles"
               :key="tile.id"
-              @click="navigateToGallery"
+              @click="navigateToGallery(tile.id)"
               class="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105"
             >
               <img
@@ -76,24 +81,3 @@ const navigateToGallery = () => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.overflow-y-auto {
-  scrollbar-width: thin;
-  scrollbar-color: #F2682C #f1f1f1;
-}
-
-.overflow-y-auto::-webkit-scrollbar {
-  width: 6px;
-}
-
-.overflow-y-auto::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
-}
-
-.overflow-y-auto::-webkit-scrollbar-thumb {
-  background: #F2682C;
-  border-radius: 3px;
-}
-</style>
